@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom component classes using Tailwind - Monochrome Theme */
+@layer components {
+  .glass-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    @apply rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-md;
+  }
+  
+  .gradient-button {
+    @apply bg-gradient-button text-white font-semibold py-3 px-6 rounded-xl 
+           transition-all duration-300 hover:scale-105 hover:shadow-xl
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
+           shadow-lg;
+  }
+  
+  .input-field {
+    @apply w-full px-4 py-3 bg-mono-white border border-mono-border 
+           rounded-xl text-mono-black placeholder-mono-text focus:outline-none 
+           focus:ring-2 focus:ring-mono-black focus:border-mono-black
+           transition-all duration-300;
+  }
+  
+  .stat-card {
+    @apply glass-card p-6 text-center animate-slide-up hover:scale-105;
+  }
+  
+  .wallet-info-card {
+    @apply glass-card p-4 flex items-center justify-between hover:scale-105;
+  }
+  
+  .transaction-item {
+    @apply glass-card p-4 mb-3 animate-fade-in hover:bg-mono-white;
+  }
+  
+  .loading-skeleton {
+    @apply bg-gradient-to-r from-mono-border via-mono-track to-mono-border 
+           animate-shimmer bg-[length:200%_100%] rounded-xl;
+  }
+  
+  .progress-card {
+    @apply glass-card p-6 bg-gradient-secondary border-mono-border;
+  }
+  
+  .price-history-card {
+    @apply glass-card p-6 bg-gradient-secondary border-mono-border;
+  }
+}
+
+/* Toast customization with Tailwind */
+@layer utilities {
+  .toast-container {
+    @apply !w-80 !max-w-[90vw];
+  }
+  
+  .toast-base {
+    @apply !rounded-xl !font-medium !text-sm !min-h-[48px] 
+           !p-3 !mb-2 !shadow-toast;
+  }
+  
+  .toast-success {
+    @apply !bg-gradient-success !text-white;
+  }
+  
+  .toast-error {
+    @apply !bg-gradient-error !text-white;
+  }
+  
+  .toast-warning {
+    @apply !bg-gradient-warning !text-white;
+  }
+  
+  .toast-info {
+    @apply !bg-gradient-info !text-white;
+  }
+}
+
+/* Error boundary styles */
+.error-boundary {
+  @apply min-h-screen flex items-center justify-center bg-gradient-primary p-4;
+}
+
+.error-content {
+  @apply glass-card p-8 max-w-md w-full text-center text-white;
+}
+
+.error-actions {
+  @apply flex gap-4 mt-6 justify-center;
+}
+
+.reload-btn, .retry-btn {
+  @apply gradient-button;
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+  .toast-container {
+    @apply !w-full !max-w-[calc(100vw-20px)] !left-[10px] !right-[10px];
+  }
+  
+  .toast-base {
+    @apply !text-xs !min-h-[44px] !p-2;
+  }
+}
