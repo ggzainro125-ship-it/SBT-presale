@@ -44,6 +44,7 @@ function App(){
   const [lastTransaction, setLastTransaction] = useState(null);
   const [currentPage, setCurrentPage] = useState('home');
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
+  const [homeActiveTab, setHomeActiveTab] = useState('purchase');
   
   // Function to reset welcome modal (for testing)
   const resetWelcomeModal = () => {
@@ -221,6 +222,8 @@ function App(){
             showReceipt={showReceipt}
             setShowReceipt={setShowReceipt}
             lastTransaction={lastTransaction}
+            activeTab={homeActiveTab}
+            setActiveTab={setHomeActiveTab}
           />
         );
       case 'about':
@@ -310,8 +313,8 @@ function App(){
         {/* Floating Action Button - Only show on home page */}
         {currentPage === 'home' && (
           <FloatingActionButton 
-            activeTab={currentPage}
-            setActiveTab={setCurrentPage}
+            activeTab={homeActiveTab}
+            setActiveTab={setHomeActiveTab}
           />
         )}
       </div>

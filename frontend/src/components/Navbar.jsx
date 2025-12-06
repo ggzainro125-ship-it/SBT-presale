@@ -154,9 +154,6 @@ const Navbar = ({
                 <div className="w-10 h-10 bg-gradient-to-br from-primary-500 via-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
                   <Rocket className="w-6 h-6 text-white" />
                 </div>
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full animate-pulse">
-                  <Sparkles className="w-3 h-3 text-white m-0.5" />
-                </div>
               </div>
               <div>
                 <h1 className="text-xl font-bold bg-gradient-to-r from-gray-900 via-purple-900 to-gray-900 bg-clip-text text-transparent">

@@ -10,32 +10,27 @@ import {
   Award,
   Globe,
   Code,
-  Heart,
-  Star
+  Heart
 } from 'lucide-react';
 
 const AboutPage = () => {
   const teamMembers = [
     {
-      name: 'Alex Chen',
       role: 'CEO & Founder',
       avatar: '👨‍💼',
       description: 'Blockchain visionary with 8+ years in DeFi'
     },
     {
-      name: 'Sarah Kim',
       role: 'CTO',
       avatar: '👩‍💻',
       description: 'Technical expert and Solana core contributor'
     },
     {
-      name: 'Mike Rodriguez',
       role: 'Head of Product',
       avatar: '👨‍🎨',
       description: 'UX designer focused on Web3 experiences'
     },
     {
-      name: 'Emma Thompson',
       role: 'Marketing Director',
       avatar: '👩‍🚀',
       description: 'Growth hacker with crypto marketing expertise'
@@ -82,9 +77,6 @@ const AboutPage = () => {
         <div className="relative inline-block">
           <div className="w-24 h-24 bg-gradient-to-br from-primary-500 via-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-6">
             <Rocket className="w-12 h-12 text-white" />
-          </div>
-          <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center animate-pulse">
-            <Star className="w-4 h-4 text-white" />
           </div>
         </div>
         
@@ -222,7 +214,6 @@ const AboutPage = () => {
                   <Award className="w-4 h-4 text-white" />
                 </div>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-1">{member.name}</h3>
               <p className="text-primary-600 font-medium mb-2">{member.role}</p>
               <p className="text-sm text-gray-600">{member.description}</p>
             </div>

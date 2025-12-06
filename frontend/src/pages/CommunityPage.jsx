@@ -54,7 +54,7 @@ const CommunityPage = () => {
       name: 'Reddit',
       description: 'Deep discussions and community governance',
       members: '3,456',
-      icon: '🤖',
+      icon: '📋',
       link: '#',
       color: 'from-orange-500 to-red-500'
     }
@@ -92,7 +92,7 @@ const CommunityPage = () => {
     { rank: 2, name: 'BlockchainPro', points: 12340, badge: '🥈' },
     { rank: 3, name: 'DeFiExplorer', points: 9876, badge: '🥉' },
     { rank: 4, name: 'TokenHunter', points: 8765, badge: '⭐' },
-    { rank: 5, name: 'AIEnthusiast', points: 7654, badge: '⭐' }
+    { rank: 5, name: 'CryptoTrader', points: 7654, badge: '⭐' }
   ];
 
   const achievements = [

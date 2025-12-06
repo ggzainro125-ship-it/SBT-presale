@@ -17,25 +17,25 @@ const ReferralSystem = ({ walletPubkey, isConnected }) => {
     if (!walletPubkey) return;
     
     setLoading(true);
+    
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
     try {
-      const response = await fetch(`/api/user/${walletPubkey}`);
-      if (response.ok) {
-        const userData = await response.json();
-        if (userData.success && userData.data.referral_code) {
-          setReferralCode(userData.data.referral_code);
-          
-          // Fetch referral stats
-          const statsResponse = await fetch(`/api/referral/${userData.data.referral_code}`);
-          if (statsResponse.ok) {
-            const statsData = await statsResponse.json();
-            if (statsData.success) {
-              setReferralData(statsData.data);
-            }
-          }
-        }
-      }
+      // Generate a referral code based on wallet address
+      const code = walletPubkey.slice(0, 8).toUpperCase();
+      setReferralCode(code);
+      
+      // Mock referral data - in a real app this would come from your backend
+      const mockReferralData = {
+        total_referrals: Math.floor(Math.random() * 10) + 1,
+        total_bonus_tokens: Math.floor(Math.random() * 5000) + 500,
+        total_volume: Math.random() * 10 + 1
+      };
+      
+      setReferralData(mockReferralData);
     } catch (error) {
-      console.error('Error fetching referral data:', error);
+      console.error('Error generating referral data:', error);
     } finally {
       setLoading(false);
     }
@@ -117,7 +117,7 @@ const ReferralSystem = ({ walletPubkey, isConnected }) => {
           </div>
           <div className="bg-mono-light p-4 rounded-lg border border-mono-border text-center">
             <div className="text-2xl font-bold text-mono-black">
-              {referralData.total_volume ? `${referralData.total_volume.toFixed(4)} SOL` : '0 SOL'}
+              {referralData.total_volume ? `${Number(referralData.total_volume).toFixed(4)} SOL` : '0 SOL'}
             </div>
             <div className="text-mono-text text-sm">Referral Volume</div>
           </div>

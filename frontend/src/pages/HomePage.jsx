@@ -22,9 +22,14 @@ const HomePage = ({
   status,
   showReceipt,
   setShowReceipt,
-  lastTransaction
+  lastTransaction,
+  activeTab: propActiveTab,
+  setActiveTab: propSetActiveTab
 }) => {
-  const [activeTab, setActiveTab] = useState('purchase');
+  // Use internal state if props are not provided (fallback)
+  const [internalActiveTab, setInternalActiveTab] = useState('purchase');
+  const activeTab = propActiveTab || internalActiveTab;
+  const setActiveTab = propSetActiveTab || setInternalActiveTab;
 
   const handleAmountChange = (e) => {
     const value = Math.max(1, parseInt(e.target.value) || 0);

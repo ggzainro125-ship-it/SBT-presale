@@ -12,7 +12,10 @@ const FloatingActionButton = ({ activeTab, setActiveTab }) => {
   ];
 
   const handleActionClick = (tabId) => {
-    setActiveTab(tabId);
+    if (setActiveTab) {
+      setActiveTab(tabId);
+    }
+    
     setIsOpen(false);
     
     // Scroll to top smoothly

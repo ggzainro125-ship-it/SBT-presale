@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import { Connection, PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js';
 
 export const useWallet = () => {
   const [provider, setProvider] = useState(null);
   const [walletPubkey, setWalletPubkey] = useState(null);
   const [isConnecting, setIsConnecting] = useState(false);
   const [balance, setBalance] = useState(null);
+  
+  // Create connection to Solana mainnet
+  const connection = new Connection('https://api.mainnet-beta.solana.com');
 
   useEffect(() => {
     // Check for Phantom wallet
@@ -26,6 +30,30 @@ export const useWallet = () => {
     }
   }, []);
 
+  // Fetch balance when wallet connects
+  useEffect(() => {
+    const fetchBalance = async () => {
+      if (walletPubkey && connection) {
+        try {
+          const publicKey = new PublicKey(walletPubkey);
+          const balance = await connection.getBalance(publicKey);
+          const solBalance = balance / LAMPORTS_PER_SOL;
+          setBalance(solBalance);
+        } catch (error) {
+          console.error('Error fetching balance:', error);
+          setBalance(0);
+        }
+      }
+    };
+
+    if (walletPubkey) {
+      fetchBalance();
+      // Set up interval to refresh balance every 30 seconds
+      const interval = setInterval(fetchBalance, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [walletPubkey, connection]);
+
   const connect = async () => {
     if (!provider) {
       toast.error("👻 Install Phantom", {
@@ -44,6 +72,17 @@ export const useWallet = () => {
       // Store in localStorage for persistence
       localStorage.setItem('walletConnected', 'true');
       localStorage.setItem('walletPubkey', pubkey);
+      
+      // Fetch balance immediately after connecting
+      try {
+        const publicKey = new PublicKey(pubkey);
+        const balance = await connection.getBalance(publicKey);
+        const solBalance = balance / LAMPORTS_PER_SOL;
+        setBalance(solBalance);
+      } catch (balanceError) {
+        console.error('Error fetching balance after connect:', balanceError);
+        setBalance(0);
+      }
       
       toast.success("✓ Connected", {
         position: "top-right",
@@ -77,12 +116,13 @@ export const useWallet = () => {
     });
   };
 
-  const getBalance = async (connection) => {
-    if (!provider || !walletPubkey) return null;
+  const getBalance = async () => {
+    if (!walletPubkey) return null;
     
     try {
-      const balance = await connection.getBalance(provider.publicKey);
-      const solBalance = balance / 1e9; // Convert lamports to SOL
+      const publicKey = new PublicKey(walletPubkey);
+      const balance = await connection.getBalance(publicKey);
+      const solBalance = balance / LAMPORTS_PER_SOL;
       setBalance(solBalance);
       return solBalance;
     } catch (error) {
