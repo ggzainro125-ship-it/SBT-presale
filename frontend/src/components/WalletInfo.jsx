@@ -1,6 +1,11 @@
 import React from 'react';
 import { toast } from 'react-toastify';
 
+// Helper function to detect mobile devices
+const isMobile = () => {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+};
+
 const WalletInfo = ({ walletPubkey, balance, onDisconnect }) => {
   const copyToClipboard = async (text) => {
     try {
@@ -27,7 +32,44 @@ const WalletInfo = ({ walletPubkey, balance, onDisconnect }) => {
     return `${balance.toFixed(4)} SOL`;
   };
 
-  if (!walletPubkey) return null;
+  // Handle wallet connection for mobile users
+  const handleMobileWalletConnect = () => {
+    if (isMobile()) {
+      // Try to open Phantom app with deep link
+      const deepLink = `phantom://browse/${encodeURIComponent(window.location.href)}`;
+      const fallbackUrl = 'https://phantom.app/download';
+      
+      // Attempt to open the deep link
+      window.location.href = deepLink;
+      
+      // Fallback in case deep link doesn't work
+      setTimeout(() => {
+        window.open(fallbackUrl, '_blank');
+      }, 3000);
+    }
+  };
+
+  if (!walletPubkey) {
+    if (isMobile()) {
+      return (
+        <div className="wallet-info-card">
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-2">
+              <span className="text-mono-text text-sm">Wallet:</span>
+              <span className="text-mono-black font-medium">Phantom Mobile</span>
+            </div>
+            <button 
+              className="text-mono-text text-sm underline cursor-pointer hover:text-mono-black"
+              onClick={handleMobileWalletConnect}
+            >
+              Tap to open Phantom app
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  }
 
   return (
     <div className="wallet-info-card">

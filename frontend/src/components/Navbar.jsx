@@ -40,7 +40,29 @@ const Navbar = ({
     if (typeof window !== 'undefined' && window.solana?.isPhantom) {
       return 'Phantom Wallet';
     }
-    return 'Connected Wallet';
+    
+    // Check if user is on mobile
+    const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (isMobileDevice) {
+      return 'Phantom Mobile';
+    }
+    
+    return 'Wallet Not Detected';
+  };
+  
+  // Get wallet status message
+  const getWalletStatusMessage = () => {
+    if (typeof window !== 'undefined' && window.solana?.isPhantom) {
+      return 'Connected';
+    }
+    
+    // Check if user is on mobile
+    const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (isMobileDevice) {
+      return 'Tap to open Phantom app';
+    }
+    
+    return 'Install Phantom Wallet';
   };
   
   // Copy wallet address to clipboard
@@ -259,9 +281,19 @@ const Navbar = ({
                           </div>
                           <div className="flex-1">
                             <div className="font-semibold text-gray-900">{getWalletName()}</div>
-                            <div className="text-sm text-gray-500">Connected</div>
+                            {!window.solana?.isPhantom && (
+                              <div className="text-sm text-orange-500">{getWalletStatusMessage()}</div>
+                            )}
+                            {window.solana?.isPhantom && (
+                              <div className="text-sm text-gray-500">Connected</div>
+                            )}
                           </div>
-                          <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                          {window.solana?.isPhantom && (
+                            <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                          )}
+                          {!window.solana?.isPhantom && (
+                            <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                          )}
                         </div>
 
                         {/* Wallet Details */}
@@ -381,11 +413,21 @@ const Navbar = ({
                     </div>
                     <div className="flex-1">
                       <div className="font-semibold text-gray-900">{getWalletName()}</div>
-                      <div className="text-sm text-gray-600">
-                        {walletPubkey?.slice(0, 8)}...{walletPubkey?.slice(-8)}
-                      </div>
+                      {!window.solana?.isPhantom && (
+                        <div className="text-sm text-orange-500">{getWalletStatusMessage()}</div>
+                      )}
+                      {window.solana?.isPhantom && (
+                        <div className="text-sm text-gray-600">
+                          {walletPubkey?.slice(0, 8)}...{walletPubkey?.slice(-8)}
+                        </div>
+                      )}
                     </div>
-                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                    {window.solana?.isPhantom && (
+                      <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                    )}
+                    {!window.solana?.isPhantom && (
+                      <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                    )}
                   </div>
                   
                   <div className="flex items-center justify-between mb-3">
