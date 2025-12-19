@@ -9,11 +9,6 @@ import TransactionHistory from '../components/TransactionHistory';
 import TransactionReceipt from '../components/TransactionReceipt';
 import { config } from '../config';
 
-// Helper function to detect mobile devices
-const isMobile = () => {
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-};
-
 const HomePage = ({ 
   walletPubkey, 
   isConnected, 
@@ -43,21 +38,6 @@ const HomePage = ({
 
   const totalCost = (amount * config.TOKEN_PRICE_SOL).toFixed(6);
 
-  // Handle mobile wallet connection
-  const handleMobileConnect = () => {
-    // Try to open Phantom app with deep link
-    const deepLink = `phantom://browse/${encodeURIComponent(window.location.href)}`;
-    const fallbackUrl = 'https://phantom.app/download';
-    
-    // Attempt to open the deep link
-    window.location.href = deepLink;
-    
-    // Fallback in case deep link doesn't work
-    setTimeout(() => {
-      window.open(fallbackUrl, '_blank');
-    }, 3000);
-  };
-
   return (
     <div className="space-y-8">
       {/* Hero Section */}
@@ -72,22 +52,13 @@ const HomePage = ({
           </p>
           
           {!isConnected && (
-            isMobile() ? (
-              <button
-                onClick={handleMobileConnect}
-                className="gradient-button text-lg px-8 py-4 mb-6"
-              >
-                Open Phantom App
-              </button>
-            ) : (
-              <button
-                onClick={connect}
-                disabled={isConnecting}
-                className="gradient-button text-lg px-8 py-4 mb-6"
-              >
-                {isConnecting ? 'Connecting...' : 'Connect Wallet to Begin'}
-              </button>
-            )
+            <button
+              onClick={connect}
+              disabled={isConnecting}
+              className="gradient-button text-lg px-8 py-4 mb-6"
+            >
+              {isConnecting ? 'Connecting...' : 'Connect Wallet to Begin'}
+            </button>
           )}
         </div>
       </div>
@@ -160,22 +131,13 @@ const HomePage = ({
                 {isLoading ? 'Processing...' : `Buy ${amount.toLocaleString()} SBT Tokens`}
               </button>
             ) : (
-              isMobile() ? (
-                <button
-                  onClick={handleMobileConnect}
-                  className="gradient-button w-full py-4 text-lg"
-                >
-                  Open Phantom App to Connect
-                </button>
-              ) : (
-                <button
-                  onClick={connect}
-                  disabled={isConnecting}
-                  className="gradient-button w-full py-4 text-lg"
-                >
-                  {isConnecting ? 'Connecting...' : 'Connect Wallet'}
-                </button>
-              )
+              <button
+                onClick={connect}
+                disabled={isConnecting}
+                className="gradient-button w-full py-4 text-lg"
+              >
+                {isConnecting ? 'Connecting...' : 'Connect Wallet'}
+              </button>
             )}
           </div>
         )}
@@ -225,9 +187,7 @@ const HomePage = ({
             {
               step: 1,
               title: 'Connect Wallet',
-              description: isMobile() 
-                ? 'Open the Phantom app and connect your wallet' 
-                : 'Connect your Phantom wallet to get started'
+              description: 'Connect your Phantom wallet to get started'
             },
             {
               step: 2,
