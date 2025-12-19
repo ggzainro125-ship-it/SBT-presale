@@ -1,0 +1,146 @@
+/* Mobile-specific styles */
+
+/* Ensure content doesn't overlap with bottom navigation */
+@media (max-width: 1023px) {
+  /* Main content padding for mobile */
+  .pt-20 {
+    padding-top: 4rem; /* Reduced from 5rem to 4rem */
+  }
+  
+  .pb-20 {
+    padding-bottom: 4rem; /* Adjusted for bottom nav */
+  }
+  
+  /* Adjust for bottom nav height */
+  .bottom-nav-safe-area {
+    padding-bottom: 60px;
+  }
+  
+  /* Compact navbar on mobile */
+  .navbar-mobile-compact {
+    height: 4rem;
+  }
+  
+  /* Mobile menu content */
+  .mobile-menu-content {
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+  }
+  
+  /* Glass card adjustments for mobile */
+  .glass-card {
+    margin-bottom: 1rem;
+  }
+  
+  /* Button adjustments for mobile */
+  .gradient-button {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  /* Input field adjustments */
+  .input-field {
+    padding: 0.75rem;
+    font-size: 1rem;
+  }
+}
+
+/* Bottom navigation styles */
+.mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid #e5e7eb;
+  z-index: 50;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-bottom-nav button {
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.mobile-bottom-nav button:hover:not(.home-button) {
+  transform: translateY(-2px);
+}
+
+.mobile-bottom-nav button.active {
+  color: #6366f1; /* primary-500 */
+}
+
+/* Home button specific styles */
+.mobile-bottom-nav .home-button {
+  transform: none !important;
+}
+
+.mobile-bottom-nav .home-button.active {
+  transform: scale(1.05);
+}
+
+/* Hide desktop elements on mobile */
+@media (max-width: 1023px) {
+  .desktop-only {
+    display: none !important;
+  }
+  
+  .mobile-hidden {
+    display: none;
+  }
+  
+  /* Reduce padding on mobile */
+  .p-8 {
+    padding: 1.5rem;
+  }
+  
+  .p-6 {
+    padding: 1.25rem;
+  }
+  
+  .p-4 {
+    padding: 1rem;
+  }
+  
+  /* Adjust font sizes for mobile */
+  .text-4xl {
+    font-size: 2rem;
+  }
+  
+  .text-2xl {
+    font-size: 1.5rem;
+  }
+  
+  .text-xl {
+    font-size: 1.25rem;
+  }
+}
+
+/* Show mobile elements only on mobile */
+@media (min-width: 1024px) {
+  .mobile-only {
+    display: none !important;
+  }
+}
+
+/* Mobile-specific utility classes */
+.mobile-center {
+  text-align: center;
+}
+
+.mobile-full-width {
+  width: 100%;
+}
+
+/* Responsive grid for mobile */
+@media (max-width: 768px) {
+  .grid-cols-1.md\:grid-cols-4 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-cols-1.md\:grid-cols-4 {
+    grid-template-columns: 1fr;
+  }
+}

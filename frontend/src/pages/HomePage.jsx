@@ -38,6 +38,113 @@ const HomePage = ({
 
   const totalCost = (amount * config.TOKEN_PRICE_SOL).toFixed(6);
 
+  // Render the tabbed section
+  const renderTabbedSection = () => (
+    <div className="glass-card p-6">
+      <div className="flex border-b border-mono-border mb-6 overflow-x-auto">
+        {[
+          { id: 'purchase', label: 'Purchase', icon: Zap },
+          { id: 'calculator', label: 'Calculator' },
+          { id: 'whitelist', label: 'Whitelist' },
+          { id: 'referral', label: 'Referrals' },
+          { id: 'analytics', label: 'Analytics' }
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`px-4 py-3 font-medium transition-colors whitespace-nowrap ${
+              activeTab === tab.id
+                ? 'text-mono-black border-b-2 border-mono-black'
+                : 'text-mono-text hover:text-mono-black'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Tab Content */}
+      {activeTab === 'purchase' && (
+        <div>
+          {/* Transaction History */}
+          <div className="mb-6">
+            <TransactionHistory />
+          </div>
+          
+          <div className="mb-6">
+            <label htmlFor="amount" className="block text-sm font-medium text-mono-black mb-2">
+              Amount (SBT):
+            </label>
+            <input
+              id="amount"
+              type="number"
+              value={amount}
+              onChange={handleAmountChange}
+              placeholder="Enter amount"
+              className="input-field"
+              disabled={isLoading}
+              min="1"
+              step="1"
+            />
+          </div>
+
+          <div className="mb-6 p-4 bg-mono-light border border-mono-border rounded-xl">
+            <div className="flex justify-between items-center text-lg">
+              <span className="text-mono-text">Total Cost:</span>
+              <span className="font-bold text-mono-black">{totalCost} SOL</span>
+            </div>
+          </div>
+
+          {isConnected ? (
+            <button
+              onClick={handlePurchase}
+              disabled={isLoading || amount <= 0}
+              className="gradient-button w-full py-4 text-lg"
+            >
+              {isLoading ? 'Processing...' : `Buy ${amount.toLocaleString()} SBT Tokens`}
+            </button>
+          ) : (
+            <button
+              onClick={connect}
+              disabled={isConnecting}
+              className="gradient-button w-full py-4 text-lg"
+            >
+              {isConnecting ? 'Connecting...' : 'Connect Wallet'}
+            </button>
+          )}
+        </div>
+      )}
+
+      {activeTab === 'calculator' && (
+        <PriceCalculator 
+          tokenPrice={config.TOKEN_PRICE_SOL}
+          currentStage={1}
+        />
+      )}
+
+      {activeTab === 'whitelist' && (
+        <WhitelistStatus 
+          walletPubkey={walletPubkey} 
+          isConnected={isConnected} 
+        />
+      )}
+
+      {activeTab === 'referral' && (
+        <ReferralSystem 
+          walletPubkey={walletPubkey} 
+          isConnected={isConnected} 
+        />
+      )}
+
+      {activeTab === 'analytics' && (
+        <AnalyticsDashboard 
+          walletPubkey={walletPubkey} 
+          isConnected={isConnected} 
+        />
+      )}
+    </div>
+  );
+
   return (
     <div className="space-y-8">
       {/* Hero Section */}
@@ -63,113 +170,14 @@ const HomePage = ({
         </div>
       </div>
 
+      {/* Show Tabbed Section at the top when wallet is connected */}
+      {isConnected && renderTabbedSection()}
+
       {/* Token Stats */}
       <TokenStats />
 
-      {/* Main Content Tabs */}
-      <div className="glass-card p-6">
-        <div className="flex border-b border-mono-border mb-6 overflow-x-auto">
-          {[
-            { id: 'purchase', label: 'Purchase', icon: Zap },
-            { id: 'calculator', label: 'Calculator' },
-            { id: 'whitelist', label: 'Whitelist' },
-            { id: 'referral', label: 'Referrals' },
-            { id: 'analytics', label: 'Analytics' }
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-3 font-medium transition-colors whitespace-nowrap ${
-                activeTab === tab.id
-                  ? 'text-mono-black border-b-2 border-mono-black'
-                  : 'text-mono-text hover:text-mono-black'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Tab Content */}
-        {activeTab === 'purchase' && (
-          <div>
-            {/* Transaction History */}
-            <div className="mb-6">
-              <TransactionHistory />
-            </div>
-            
-            <div className="mb-6">
-              <label htmlFor="amount" className="block text-sm font-medium text-mono-black mb-2">
-                Amount (SBT):
-              </label>
-              <input
-                id="amount"
-                type="number"
-                value={amount}
-                onChange={handleAmountChange}
-                placeholder="Enter amount"
-                className="input-field"
-                disabled={isLoading}
-                min="1"
-                step="1"
-              />
-            </div>
-
-            <div className="mb-6 p-4 bg-mono-light border border-mono-border rounded-xl">
-              <div className="flex justify-between items-center text-lg">
-                <span className="text-mono-text">Total Cost:</span>
-                <span className="font-bold text-mono-black">{totalCost} SOL</span>
-              </div>
-            </div>
-
-            {isConnected ? (
-              <button
-                onClick={handlePurchase}
-                disabled={isLoading || amount <= 0}
-                className="gradient-button w-full py-4 text-lg"
-              >
-                {isLoading ? 'Processing...' : `Buy ${amount.toLocaleString()} SBT Tokens`}
-              </button>
-            ) : (
-              <button
-                onClick={connect}
-                disabled={isConnecting}
-                className="gradient-button w-full py-4 text-lg"
-              >
-                {isConnecting ? 'Connecting...' : 'Connect Wallet'}
-              </button>
-            )}
-          </div>
-        )}
-
-        {activeTab === 'calculator' && (
-          <PriceCalculator 
-            tokenPrice={config.TOKEN_PRICE_SOL}
-            currentStage={1}
-          />
-        )}
-
-        {activeTab === 'whitelist' && (
-          <WhitelistStatus 
-            walletPubkey={walletPubkey} 
-            isConnected={isConnected} 
-          />
-        )}
-
-        {activeTab === 'referral' && (
-          <ReferralSystem 
-            walletPubkey={walletPubkey} 
-            isConnected={isConnected} 
-          />
-        )}
-
-        {activeTab === 'analytics' && (
-          <AnalyticsDashboard 
-            walletPubkey={walletPubkey} 
-            isConnected={isConnected} 
-          />
-        )}
-      </div>
+      {/* Show Tabbed Section here when wallet is not connected */}
+      {!isConnected && renderTabbedSection()}
 
       {/* Status Display */}
       <div className="glass-card p-4 bg-mono-light border-mono-border">

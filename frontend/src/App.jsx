@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css'
 // Components
 import ErrorBoundary from './components/ErrorBoundary'
 import Navbar from './components/Navbar'
+import MobileBottomNav from './components/MobileBottomNav'
 import WelcomeModal from './components/WelcomeModal'
 import FloatingActionButton from './components/FloatingActionButton'
 import AnalyticsDashboard from './components/AnalyticsDashboard'
@@ -205,6 +206,49 @@ function App(){
   };
 
   const renderCurrentPage = () => {
+    // Handle special wallet page for mobile
+    if (currentPage === 'wallet') {
+      return (
+        <div className="glass-card p-6 mt-4">
+          <h2 className="text-2xl font-bold mb-6 text-center">Wallet Connection</h2>
+          {isConnected ? (
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-primary-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Wallet className="w-10 h-10 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Wallet Connected</h3>
+              <p className="text-gray-600 mb-4">Your Phantom wallet is connected</p>
+              <div className="bg-gray-50 p-4 rounded-lg mb-6">
+                <p className="font-mono text-sm break-all">{walletPubkey}</p>
+                <p className="mt-2 text-lg font-semibold">{balance?.toFixed(4)} SOL</p>
+              </div>
+              <button
+                onClick={disconnect}
+                className="gradient-button px-6 py-3"
+              >
+                Disconnect Wallet
+              </button>
+            </div>
+          ) : (
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Wallet className="w-10 h-10 text-gray-500" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Connect Your Wallet</h3>
+              <p className="text-gray-600 mb-6">Connect your Phantom wallet to participate in the presale</p>
+              <button
+                onClick={connect}
+                disabled={isConnecting}
+                className="gradient-button px-6 py-3 w-full max-w-xs"
+              >
+                {isConnecting ? 'Connecting...' : 'Connect Wallet'}
+              </button>
+            </div>
+          )}
+        </div>
+      );
+    }
+
     switch (currentPage) {
       case 'home':
         return (
@@ -277,7 +321,7 @@ function App(){
         />
         
         {/* Main Content */}
-        <div className="pt-20 px-4 pb-8">
+        <div className="pt-20 pb-20 px-4"> {/* Added pb-20 for bottom nav spacing */}
           <div className="max-w-7xl mx-auto">
             {renderCurrentPage()}
           </div>
@@ -310,13 +354,22 @@ function App(){
           }}
         />
         
-        {/* Floating Action Button - Only show on home page */}
+        {/* Floating Action Button - Only show on home page and not on mobile */}
         {currentPage === 'home' && (
-          <FloatingActionButton 
-            activeTab={homeActiveTab}
-            setActiveTab={setHomeActiveTab}
-          />
+          <div className="hidden lg:block">
+            <FloatingActionButton 
+              activeTab={homeActiveTab}
+              setActiveTab={setHomeActiveTab}
+            />
+          </div>
         )}
+        
+        {/* Mobile Bottom Navigation */}
+        <MobileBottomNav 
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          isConnected={isConnected}
+        />
       </div>
     </ErrorBoundary>
   )

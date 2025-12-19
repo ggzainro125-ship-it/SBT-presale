@@ -43,21 +43,6 @@ const Navbar = ({
     return 'Wallet Not Detected';
   };
   
-  // Get wallet status message
-  const getWalletStatusMessage = () => {
-    if (typeof window !== 'undefined' && window.solana?.isPhantom) {
-      return 'Connected';
-    }
-    
-    // Check if user is on mobile
-    const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    if (isMobileDevice) {
-      return 'Tap to open Phantom app';
-    }
-    
-    return 'Install Phantom Wallet';
-  };
-  
   // Copy wallet address to clipboard
   const copyWalletAddress = async () => {
     if (walletPubkey) {
@@ -154,14 +139,14 @@ const Navbar = ({
 
   return (
     <>
-      {/* Main Navbar */}
+      {/* Main Navbar - Simplified for Mobile */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled 
           ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200/50' 
           : 'bg-transparent'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-16 navbar-mobile-compact">
             
             {/* Logo & Brand */}
             <div className="flex items-center gap-3">
@@ -170,11 +155,15 @@ const Navbar = ({
                   <Rocket className="w-6 h-6 text-white" />
                 </div>
               </div>
-              <div>
+              <div className="hidden sm:block">
                 <h1 className="text-xl font-bold bg-gradient-to-r from-gray-900 via-purple-900 to-gray-900 bg-clip-text text-transparent">
                   Shibartum
                 </h1>
                 <p className="text-xs text-gray-500 -mt-1">Advanced Presale Platform</p>
+              </div>
+              {/* Mobile brand name */}
+              <div className="sm:hidden">
+                <h1 className="text-lg font-bold text-gray-900">Shibartum</h1>
               </div>
             </div>
 
@@ -229,7 +218,7 @@ const Navbar = ({
 
             {/* Right Side Actions */}
             <div className="flex items-center gap-3">
-              {/* Welcome Button */}
+              {/* Welcome Button - Hidden on mobile */}
               <button
                 onClick={onShowWelcome}
                 className="hidden sm:flex items-center gap-2 px-3 py-2 text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors"
@@ -240,16 +229,16 @@ const Navbar = ({
 
               {/* User Button with Wallet Info */}
               {isConnected && (
-                <div className="relative user-menu-container">
+                <div className="relative user-menu-container hidden md:flex">
                   <button
                     onClick={() => setShowUserMenu(!showUserMenu)}
-                    className="hidden md:flex items-center gap-3 px-4 py-2 bg-white/90 backdrop-blur-sm rounded-lg border border-gray-200/50 hover:bg-white hover:shadow-md transition-all duration-200"
+                    className="flex items-center gap-3 px-4 py-2 bg-white/90 backdrop-blur-sm rounded-lg border border-gray-200/50 hover:bg-white hover:shadow-md transition-all duration-200"
                   >
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-purple-500 rounded-full flex items-center justify-center">
                         <User className="w-4 h-4 text-white" />
                       </div>
-                      <div className="text-left">
+                      <div className="text-left hidden lg:block">
                         <div className="text-sm font-medium text-gray-900">
                           {getWalletName()}
                         </div>
@@ -274,12 +263,7 @@ const Navbar = ({
                           </div>
                           <div className="flex-1">
                             <div className="font-semibold text-gray-900">{getWalletName()}</div>
-                            {!window.solana?.isPhantom && (
-                              <div className="text-sm text-orange-500">{getWalletStatusMessage()}</div>
-                            )}
-                            {window.solana?.isPhantom && (
-                              <div className="text-sm text-gray-500">Connected</div>
-                            )}
+                            <div className="text-sm text-gray-500">Connected</div>
                           </div>
                           <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
                         </div>
@@ -345,7 +329,7 @@ const Navbar = ({
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden bg-white/95 backdrop-blur-md border-t border-gray-200/50 animate-slide-down">
+          <div className="lg:hidden bg-white/95 backdrop-blur-md border-t border-gray-200/50 animate-slide-down mobile-menu-content">
             <div className="px-4 py-4 space-y-2">
               {navigationItems.map((item) => {
                 const Icon = item.icon;
@@ -429,6 +413,30 @@ const Navbar = ({
                   </div>
                 </div>
               )}
+              
+              {/* About Page Link for Mobile */}
+              <button
+                onClick={() => {
+                  setCurrentPage('about');
+                  setIsMobileMenuOpen(false);
+                }}
+                className="w-full flex items-center gap-3 px-4 py-3 text-left text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <Info className="w-5 h-5" />
+                <span>About Shibartum</span>
+              </button>
+              
+              {/* Welcome Button for Mobile Menu */}
+              <button
+                onClick={() => {
+                  onShowWelcome();
+                  setIsMobileMenuOpen(false);
+                }}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-primary-600 bg-white rounded-lg hover:bg-primary-50 transition-colors"
+              >
+                <Info className="w-4 h-4" />
+                <span>Welcome Guide</span>
+              </button>
             </div>
           </div>
         )}
